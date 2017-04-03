@@ -21,7 +21,7 @@ public class StudenteDAO {
 		
 		Studente result= null;
 		try {
-			Connection conn = db.getConnection();
+			Connection conn = ConnectDB.getConnection();
 			
 			PreparedStatement st = conn.prepareStatement(sql) ;
 			

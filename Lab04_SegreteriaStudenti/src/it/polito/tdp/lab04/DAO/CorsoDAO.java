@@ -29,9 +29,17 @@ public class CorsoDAO {
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
-
+				Corso co= new Corso(
+						rs.getString("codins"),
+						rs.getInt("crediti"),
+						rs.getString("nome"),
+						rs.getInt("pd")
+						);
+               corsi.add(co);
 				// Crea un nuovo JAVA Bean Corso
 				// Aggiungi il nuovo Corso alla lista
+				
+										
 			}
 
 			return corsi;
@@ -46,7 +54,7 @@ public class CorsoDAO {
 	 * Dato un codice insegnamento, ottengo il corso
 	 */
 	public void getCorso(Corso corso) {
-		// TODO
+		
 	}
 
 	/*
