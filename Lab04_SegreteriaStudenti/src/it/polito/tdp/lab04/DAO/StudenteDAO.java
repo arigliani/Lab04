@@ -11,7 +11,7 @@ public class StudenteDAO {
 	private ConnectDB db;
 
       
-	public Studente find(String codice){
+	public Studente find(int codice){
 		
 		String sql = 
 				//INSERT INTO `iscritticorsi`.`studente` (`matricola`, `cognome`, `nome`) VALUES ('544545', 'g', 'h');
@@ -25,7 +25,7 @@ public class StudenteDAO {
 			
 			PreparedStatement st = conn.prepareStatement(sql) ;
 			
-			st.setString(1, codice);
+			st.setInt(1, codice);
 			
          ResultSet res = st.executeQuery() ;
 			
