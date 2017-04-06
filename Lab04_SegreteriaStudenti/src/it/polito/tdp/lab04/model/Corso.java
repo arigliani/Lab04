@@ -1,10 +1,14 @@
 package it.polito.tdp.lab04.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Corso {
 	private String codins;
 	private int crediti;
 	private String nome;
 	private int pd;
+	private List<Studente> studenti= new LinkedList<Studente>();
 	
 	public Corso(String codins, int crediti, String nome, int pd) {
 		super();
@@ -14,6 +18,23 @@ public class Corso {
 		this.pd = pd;
 	}
 
+	
+	public List<Studente> getStudenti(){
+		
+		return this.studenti;
+		
+	}
+	
+	
+	public boolean aggiungiStudente(Studente s){
+		for(Studente stu: studenti){
+			if(stu.getMaticola()==s.getMaticola())
+				return false;
+		}
+		this.studenti.add(s);
+		return true;
+		
+	}
 	/**
 	 * @return the codins
 	 */
@@ -106,7 +127,7 @@ public class Corso {
 	 */
 	@Override
 	public String toString() {
-		return "Corso [codins=" + codins + ", crediti=" + crediti + ", nome=" + nome + ", pd=" + pd + "]";
+		return ""+this.getNome();
 	}
 	
 	

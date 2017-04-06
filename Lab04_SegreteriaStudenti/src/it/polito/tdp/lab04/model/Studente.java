@@ -1,10 +1,16 @@
 package it.polito.tdp.lab04.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import it.polito.tdp.lab04.DAO.StudenteDAO;
+
 public class Studente {
 	private int maticola;
 	private String nome;
 	private String cognome;
 	private String cds;
+	private List<Corso> corsi= new LinkedList<Corso>();
 	
 	public Studente(int maticola, String nome, String cognome) {
 		super();
@@ -12,6 +18,26 @@ public class Studente {
 		this.nome = nome;
 		this.cognome = cognome;
 	}
+	
+    public List<Corso> getCorsi(){
+    	//StudenteDAO daoS= new StudenteDAO();
+    	//corsi=daoS.getCorsiStudente(this);
+		return this.corsi;
+		
+	}
+    
+    public boolean aggiungiCorso(Corso c){
+		for(Corso stu: corsi){
+			if(stu.getCodins().equals(c.getCodins()))
+				return false;
+		}
+		this.corsi.add(c);
+		return true;
+		
+	}
+	
+	
+	
 
 	/**
 	 * @return the maticola

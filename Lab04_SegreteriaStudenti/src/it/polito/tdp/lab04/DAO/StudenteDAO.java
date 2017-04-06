@@ -1,14 +1,17 @@
 package it.polito.tdp.lab04.DAO;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
+import it.polito.tdp.lab04.model.Corso;
 import it.polito.tdp.lab04.model.Studente;
 
 public class StudenteDAO {
-	private ConnectDB db;
+//	private ConnectDB db;
 
       
 	public Studente find(int codice){
@@ -18,10 +21,12 @@ public class StudenteDAO {
 		"SELECT `matricola`, `cognome`, `nome`, `CDS` "+
 				"FROM `iscritticorsi`.`studente` "+
 		"WHERE  `matricola`=?";
+		String jdbcUrl = "jdbc:mysql://localhost/iscritticorsi?user=root&password=root";
+		
 		
 		Studente result= null;
 		try {
-			Connection conn = ConnectDB.getConnection();
+			Connection conn= DriverManager.getConnection(jdbcUrl);
 			
 			PreparedStatement st = conn.prepareStatement(sql) ;
 			
@@ -38,6 +43,10 @@ public class StudenteDAO {
 					
 						) ;
 				
+				if(res.getString("CDS")!=null){
+					ex.setCds(res.getString("CDS"));
+				}
+				
 				// TODO: estrarre anche voto e data_superamento !!
 				
 				result = ex ;
@@ -47,7 +56,6 @@ public class StudenteDAO {
 				
 				conn.close();
 				return result ;
-			
 			
 			
 			
@@ -61,24 +69,68 @@ public class StudenteDAO {
 		
 	}
 	
-	public boolean create(Studente s){
-		//manca cds
-		String sql= "INSERT INTO `iscritticorsi`.`studente` (`matricola`, `cognome`, `nome`) VALUES ('?', '?', '?')";
+	public List<Corso> getCorsiStudente(Studente s) {
+		//List<Studente> studenti= new LinkedList<Studente>();
 		
-		Connection conn = db.getConnection();
+		final String sql = "SELECT * FROM iscrizione";
+		Connection conn = ConnectDB.getConnection();
 		try {
+			
+			PreparedStatement st = conn.prepareStatement(sql);
+         			
+			ResultSet rs = st.executeQuery();
+            
+			while (rs.next()) {
+				if(s.getMaticola()==rs.getInt("matricola")){
+					
+					CorsoDAO cDAO= new CorsoDAO();
+					String codins=rs.getString("codins");
+					Corso c=cDAO.getCorso(codins);
+				    s.aggiungiCorso(c);
+					
+				}
+				
+				}
+				
+               //studenti.add(stu);
+				// Crea un nuovo JAVA Bean Corso
+				// Aggiungi il nuovo Corso alla lista
+				
+										
+
+			return s.getCorsi();
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException("Errore Db");
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	/*public boolean create(Studente s){
+				
+		String sql="INSERT INTO `iscritticorsi`.`studente` (`matricola`, `cognome`, `nome`) VALUES (?,?,?);";
+		String jdbcUrl = "jdbc:mysql://localhost/iscritticorsi?user=root&password=root";
+
+		
+		int result=0;
+		try {
+			Connection conn= DriverManager.getConnection(jdbcUrl);
+
 			PreparedStatement st = conn.prepareStatement(sql) ;
-			st.setInt(1, s.getMaticola());
-			st.setString(2, s.getNome());
-			st.setString(3, s.getCognome());
+			int i=Integer.parseInt("matricola");
+			st.setInt(1, i); // mTRICOLA NON me lo da come intero
+			st.setString(2, "cognome");
+			st.setString(3, "nome");
 			
-			if(s.getCds()!=null){
-				st.setString(4, s.getCds());
-			}
+            result = st.executeUpdate() ;
 			
-			int result = st.executeUpdate() ;
-			
-            conn.close();
+			conn.close();
 			
 			if(result==1) {
 				return true ;
@@ -86,16 +138,16 @@ public class StudenteDAO {
 				return false ;
 			}
 			
-			
-			
-		} catch (SQLException e) {
+		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
+		
+		
 		
 		return false;
 		
-	}
+	}*/
 	
     
 }
